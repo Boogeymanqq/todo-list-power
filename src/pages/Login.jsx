@@ -15,7 +15,7 @@ export const Login = () => {
 
   return (
     <div style={{ width: "500px", height: "300px", margin: "300px auto" }}>
-      <h1 style={{ textAlign: "center" }}>Логинизация</h1>
+      <h1 style={{ textAlign: "center", color: "#800000" }}>Логинизация</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={object({
@@ -47,8 +47,6 @@ export const Login = () => {
             const data = await response.json();
             localStorage.setItem("token", data.token);
             localStorage.setItem("login", data.user.username);
-            // setStatus(data);
-            console.log(data);
             setStatus(data.detail);
             data.user && setTimeout(() => navigate("/todolist"), 1000);
           } catch (error) {
@@ -83,13 +81,20 @@ export const Login = () => {
               helperText={Boolean(touched.password) && errors.password}
             />
             <Box height={30} />
-            <Box>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Button
                 type="submit"
                 variant="contained"
                 disabled={!dirty || !isValid}
               >
                 OK
+              </Button>
+              <Button
+                variant="outlined"
+                disabled={!dirty || !isValid}
+                onClick={() => navigate("/")}
+              >
+                Вернуться на главную (регистрацию)
               </Button>
             </Box>
           </Form>

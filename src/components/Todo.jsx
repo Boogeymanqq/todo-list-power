@@ -4,7 +4,14 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
-export const TodoList = ({ todo, i, setFakeState, setTodos }) => {
+export const TodoList = ({
+  todo,
+  i,
+  setFakeState,
+  setTodos,
+  setShowTodo,
+  setShowAlertList,
+}) => {
   const [indexTodo, setIndexTodo] = useState(null);
   const [todoValue, setTodoValue] = useState("");
   const [edit, setEdit] = useState(null);
@@ -65,6 +72,8 @@ export const TodoList = ({ todo, i, setFakeState, setTodos }) => {
   }
 
   async function deleteTodo(id) {
+    setShowAlertList(true);
+
     try {
       const response = await fetch(
         `http://dev1.itpw.ru:8083/todo/lists/${id}/`,
@@ -84,9 +93,13 @@ export const TodoList = ({ todo, i, setFakeState, setTodos }) => {
       console.log(error);
     } finally {
       setFakeState((prev) => prev + 1);
+      setTimeout(() => setShowAlertList(false), 1000);
     }
   }
 
+  function clickShowTodo() {
+    setShowTodo(i);
+  }
   if (edit === i) {
     return (
       <div>
@@ -102,13 +115,13 @@ export const TodoList = ({ todo, i, setFakeState, setTodos }) => {
   }
 
   return (
-    <div>
+    <div onClick={() => clickShowTodo(i)}>
       <li
         style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          gap: "20px",
+          gap: "40px",
         }}
       >
         {todo.name}

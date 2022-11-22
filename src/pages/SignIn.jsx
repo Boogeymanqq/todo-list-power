@@ -16,7 +16,7 @@ export const SignIn = () => {
 
   return (
     <div style={{ width: "500px", height: "300px", margin: "300px auto" }}>
-      <h1 style={{ textAlign: "center" }}>Регистрация</h1>
+      <h1 style={{ textAlign: "center", color: "#800000" }}>Регистрация</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={object({
@@ -82,7 +82,7 @@ export const SignIn = () => {
               helperText={Boolean(touched.password) && errors.password}
             />
             <Box height={30} />
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Button
                 //  sx={buttonStyled}
                 type="submit"
@@ -90,6 +90,13 @@ export const SignIn = () => {
                 disabled={!dirty || !isValid}
               >
                 OK
+              </Button>
+              <Button
+                variant="outlined"
+                disabled={!dirty || !isValid}
+                onClick={() => navigate("/login")}
+              >
+                Перейти к логину
               </Button>
             </Box>
           </Form>

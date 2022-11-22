@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextField, Container } from "@mui/material";
+import { Alert, AlertTitle, Button, TextField, Container } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
 import { TodoList } from "../components/Todo";
@@ -13,6 +13,9 @@ export const MainTodo = () => {
   const [todos, setTodos] = useState([]);
   const [todoTasks, setTodoTasks] = useState([]);
   const [fakeState, setFakeState] = useState(0);
+  const [showTodo, setShowTodo] = useState(null);
+  const [showAlertList, setShowAlertList] = useState(false);
+  const [showAlertTask, setShowAlertTask] = useState(false);
 
   async function createTodoList() {
     const objTodo = { name: listValue };
@@ -85,13 +88,23 @@ export const MainTodo = () => {
 
   return (
     <Container maxWidth="sl">
-      <h1>Ваш логин {localStorage.getItem("login")}</h1>
-      <Button onClick={exit} variant="outlined" color="error">
-        Выйти из аккаунта
-      </Button>
+      {showAlertTask && (
+        <div style={{ width: "300px", margin: "0 auto" }}>
+          <Alert variant="filled" severity="error">
+            Вы удалили задачу
+          </Alert>
+        </div>
+      )}
+      {showAlertList && (
+        <div style={{ width: "300px", margin: "0 auto" }}>
+          <Alert variant="filled" severity="error">
+            Вы удалили список задач!!!
+          </Alert>
+        </div>
+      )}
       <div
         style={{
-          margin: "150px auto",
+          margin: "100px auto",
           width: "800px",
           display: "flex",
           justifyContent: "center",
@@ -99,6 +112,22 @@ export const MainTodo = () => {
           flexDirection: "column",
         }}
       >
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "100px",
+          }}
+        >
+          <h1 style={{ margin: 0, color: "#800000" }}>
+            Ваш логин: {localStorage.getItem("login")}
+          </h1>
+          <Button onClick={exit} variant="outlined" color="error">
+            Выйти из аккаунта
+          </Button>
+        </div>
         <>
           <Button
             onClick={() => setIsShow(!isShow)}
@@ -129,43 +158,47 @@ export const MainTodo = () => {
         {todos && (
           <ul
             style={{
-              display: "flex",
-              justifyContent: "space-between",
               listStyle: "none",
               padding: 0,
               width: "100%",
-              gap: "20px",
             }}
           >
             {todos.map((todo, i) => (
-              <div key={todo.id}>
+              <div
+                key={todo.id}
+                style={{ marginBottom: "40px", border: "1px solid grey" }}
+              >
                 <TodoList
                   todo={todo}
                   i={i}
                   setFakeState={setFakeState}
                   setTodos={setTodos}
+                  setShowTodo={setShowTodo}
+                  setShowAlertList={setShowAlertList}
                 />
-                <ul
-                  style={{
-                    marginTop: "30px",
-                    padding: 0,
-                    listStyle: "none",
-                    border: "1px solid grey",
-                  }}
-                >
-                  {todoTasks.map(
-                    (task, i) =>
-                      todo.id === task.todo_list && (
-                        <Tasks
-                          key={task.id}
-                          i={i}
-                          task={task}
-                          setTodoTasks={setTodoTasks}
-                          setFakeState={setFakeState}
-                        />
-                      )
-                  )}
-                </ul>
+                {showTodo === i && (
+                  <ul
+                    style={{
+                      padding: 0,
+                      listStyle: "none",
+                      borderTop: "1px solid grey",
+                    }}
+                  >
+                    {todoTasks.map(
+                      (task, i) =>
+                        todo.id === task.todo_list && (
+                          <Tasks
+                            key={task.id}
+                            i={i}
+                            task={task}
+                            setTodoTasks={setTodoTasks}
+                            setFakeState={setFakeState}
+                            setShowAlertTask={setShowAlertTask}
+                          />
+                        )
+                    )}
+                  </ul>
+                )}
               </div>
             ))}
           </ul>

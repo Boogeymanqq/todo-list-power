@@ -3,11 +3,18 @@ import { Fab, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export const Tasks = ({ task, i, setTodoTasks, setFakeState }) => {
+export const Tasks = ({
+  task,
+  i,
+  setTodoTasks,
+  setFakeState,
+  setShowAlertTask,
+}) => {
   const [edit, setEdit] = useState(null);
   const [editValue, setEditValue] = useState("");
 
   async function deleteTask(id) {
+    setShowAlertTask(true);
     try {
       const response = await fetch(
         `http://dev1.itpw.ru:8083/todo/tasks/${id}/`,
@@ -28,6 +35,7 @@ export const Tasks = ({ task, i, setTodoTasks, setFakeState }) => {
       console.log(error);
     } finally {
       setFakeState((prev) => prev + 1);
+      setTimeout(() => setShowAlertTask(false), 1000);
     }
   }
 
@@ -51,7 +59,6 @@ export const Tasks = ({ task, i, setTodoTasks, setFakeState }) => {
         }
       );
       const data = await response.json();
-      console.log(data);
       setTodoTasks((prev) =>
         prev.map((item) => {
           if (item.id === id) {
